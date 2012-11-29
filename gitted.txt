@@ -1,0 +1,306 @@
+■github
+https://github.com/
+
+(1) アカウント作成
+
+	https://github.com/plans
+
+	無料のアカウントで作ります。
+	Free for open sourceの「Create a free account」から
+	Username・Email Address・Password・Confirm Passwordの各項目に入力して
+	アカウントを作成してください。
+
+	※Username・Email Addressは前回SVNとgitの紐付けする時に作成した
+	ユーザー名とパスワードを使って下さい。
+	https://docs.google.com/spreadsheet/ccc?key=0ArDsGqeZfOKsdFJOclV2UmxQT1RjVExqcERjaFV6VXc#gid=0
+
+
+(2) ソフトウェアをダウンロード
+
+	gitでコマンドを使う為のツールをインストールします。
+	どちらでも良いのですが、今回はmsysGitをインストールしてください。
+	
+	msysGitインストール
+	http://d.hatena.ne.jp/sho-yamasaki/20110505/1304597987
+	※openSSHかPLinkどちらを使うかを選択する場面ではopenSSHを選択してください。
+
+	Cygwinインストール
+	http://musashi.sourceforge.jp/cygwin/cygwin.html
+
+
+(3) gitの設定(ユーザー名・メールアドレス登録・その他)
+
+	msysGitインストールした方はgit.bashを立ち上げて下さい。
+	Cygwinをインストールした方はCygwin-Terminal.icoを立ち上げて下さい。
+
+	コマンドでユーザー名・メールアドレスを登録をして下さい。
+	
+		コマンド＞$ git config --global user.name "ユーザー名"
+		コマンド＞$ git config --global user.email メールアドレス
+
+	登録後、下記コマンドで確認出来ます。
+	
+		コマンド＞$ git config --global --list
+		user.email=メールアドレス
+		user.name=ユーザー名
+		
+		
+	次にインターフェースの色を変更します。
+	これをやっておくと、ターミナルで見るときに見やすくなるから設定してください。
+	
+		コマンド＞$ git config --global color.ui "auto"
+
+(4) SSH Keyの設定
+
+	メールアドレスを入れて、下記コマンドを打ってください。
+	
+		コマンド＞$ ssh-keygen -t rsa -C "メールアドレス"
+	
+		【注意】
+		Cygwinでgitだけインストールした方は
+		sshのコマンドが打てない可能性があります。
+		その場合はopensshがインストールされてないので
+		opensshをピックアップしてインストールしてください。
+		msysGitは初めから入ってます。
+	
+	するとこんなのが出ますので
+		Generating public/private rsa key pair.
+		Enter file in which to save the key (/Users/あなたのディレクトリ/.ssh/id_rsa): 
+	ここで何も考えずにエンター押します。
+
+	次にパスフレーズを打ってね♪と言われますので
+		Enter passphrase (empty for no passphrase): 
+	ここで忘れない程度のかつ難しいパスワードを打ってエンターを押して下さい。
+	
+	さらに、もう一回同じの頼むよ！と言われますので
+		Enter same passphrase again: 
+	もう一回、同じパスワードを入力してエンター！
+	
+	すると、
+	あなたの識別が/Users/schacon/.ssh/id_rsaに保存されたよ。
+	あなたの公開鍵が/Users/schacon/.ssh/id_rsa.pubに保存されれたよ。
+	フィンガープリントはコレだよ！
+	と言われます。
+		Your identification has been saved in /Users/schacon/.ssh/id_rsa.
+		Your public key has been saved in /Users/schacon/.ssh/id_rsa.pub.
+		The key fingerprint is:
+		フィンガープリント メールアドレス
+		
+	id_rsaが秘密鍵で、id_rsa.pubが公開鍵です。
+	SSH Keyの設定はここで終わりです。
+	フィンガープリントって何よ？という方は焦らないで下さい。
+	次の公開鍵の登録で登場します。
+	
+	
+(5) 公開鍵の登録
+	
+	公開鍵を登録して、先ほど作った秘密鍵でgithbと認証出来るようにします。
+	https://github.com/に移動してください。
+	
+	右上のドライバーとスパナのアイコンをクリックしてください。
+	すると、左のメニューに「SSH Keys」が出現しますのでコレをクリック。
+	次に右上にある「Add SSH key」をクリックしてください。
+	「Title」と「Key」のテキストエリアが出ますので
+	「Title」欄には任意の鍵の名前、
+	「Key」欄にid_rsa.pubの内容をコピペします。
+	
+		コマンド＞$cat ~/ .ssh/id_rsa.pub
+		
+	公開鍵の内容が記されますので
+	これをコピーして先ほどの「Key」欄に貼り付けます。
+	※msysGitは左上にアイコンから編集でコピー出来ます。
+	※Cygwinは右クリックからコピー出来ます。
+	終わりましたら、「Add key」をクリックしてください。
+	無事に登録が出来た場合は、公開鍵の登録完了メールが届きます。
+	
+	これで、秘密鍵を使ってgithubとの認証と通信が出来るようになりましたので
+	動作を確認します。
+	
+		コマンド＞$ssh -T git@github.com
+	
+	次の文言が出たら成功です。
+	Hi あなたのユーザー名! You've successfully authenticated,
+	but GitHub does not provide shell access.
+
+	※ERROR:で出る場合もあるみたいですが気にしなくてOKです。
+	※パスフレーズも求められますので、英語読んで頑張ってください。
+
+(6) リポジトリの作成
+
+	javascriptの勉強で使うgithubに移動します。
+	https://github.com/SunriseDigitalStudy
+
+	空のリポジトリを作ります。
+	https://github.com/new
+
+		「Owner」 → SunriseDigitalStudyに変更
+		「Repository name」 → 自分のユーザー名
+		「Description (optional)」 → 説明です。入れなくてOK
+		「Public・Private」 → Public
+		「Initialize this repository with a README」 → チェックを入れる
+		
+		これで、リモートリポジトリが出来ました。
+	
+	リモートリポジトリをクローンしてローカルリポジトリを作成する。
+
+		git.bashを立ち上げると、ユーザーディレクトリにいると思いますので
+		ローカルリポジトリを置きたい場所を作成して、移動します。
+		
+		gitディレクトリを作成
+		
+			コマンド＞$ mkdir git
+			
+		gitディレクトリに移動
+		
+			コマンド＞$ cd git
+
+		https://github.com/SunriseDigitalStudy/リポジトリ名
+		上記ページのSSHのURLをコピーして、次のコマンドで使用します。
+		$ git clone の後ろにコピーしたURLを貼り付けてください。
+		
+			コマンド＞$ git clone git@github.com:SunriseDigitalStudy/リポジトリの名前
+		
+		C:\Users\ユーザー名\git\、にローカルリポジトリが有るか確認してください。
+		
+		現在、ドロップボックス上に有る、javascriptのお勉強で使ってるファイルを
+		ローカルリポジトリの中に移動してください。
+
+	移動したファイルをgitが追跡出来るようにします。
+
+		インデックスにステージします。
+		
+			コマンド＞$ git add 追跡したいファイル名
+			
+		ステージした内容をコミットします。
+		
+			コマンド＞$ git commit -m "コミット内容"
+		
+	追加したファイルの内容をリモートリポジトリに送る。
+
+		これからリモートリポジトリにローカルリポジトリの変更を送る作業に入りますが
+		他の作業者がリモートリポジトリに、新たな変更を加えている可能性があるので、
+		リモートの最新版を一度ローカルに引っ張ってきます。
+		
+			コマンド＞$ git pull リモートリポジトリのURL
+		
+		※gitはリモートからクローンした時に、複製元のURLを記憶するので
+		git pullだけでもOKです。
+		
+		変更内容をリモートに送ります。
+		
+			コマンド＞$ git push リモートリポジトリのURL
+			もしくは
+			コマンド＞$ git push origin master
+			
+		githubに戻って変更内容がリモートに送られたか確認してください。
+		https://github.com/SunriseDigitalStudy/リポジトリ名
+
+(7) ブランチを作成する。
+
+	SVNではtrunkとbranchesが存在し、ブランチで作業をし、
+	trunkに変更を移してUPしていました。
+	gitでは全てがブランチです。
+	リポジトリを作った際に、初めに出来るのが
+	masterと呼ばれるブランチになります。
+	これがSVNで言うところのtrunkにあたります。
+	
+	作業用のブランチを作成します。
+		
+		コマンド＞$git branch test-20120821 master
+		
+	branchのコマンドには2つの引数を渡します。
+	一つ目はこれから作るブランチの名前を指定します。ここでは「test-日付」を指定してください。
+	二つ目は元にするブランチ名を指定します。ここでは「master」を指定。
+	ブランチが出来たか確認しましょう。
+		
+		コマンド＞$ git branch
+		* master
+		test-20120821
+		
+	$git branchでブランチ全てがリストアップされます。
+	masterの他にtest-20120821が作成されてます。
+	*が付いている方が、現在されているブランチになります。
+	ブランチを切り替えたい場合はcheckoutコマンドを使います。
+	
+		コマンド＞$ git checkout test-20120821
+		
+	これで切り替わりましたので、確認してみましょう。
+	
+		コマンド＞$git branch
+		master
+		* test-20120821
+		
+(8) ブランチをリモートに送る。
+
+	リモートの最新状態を確保する
+		コマンド＞$ git pull git@github.com:SunriseDigitalStudy/リポジトリ
+		
+	ブランチをリモートに送る。
+		コマンド＞$ git push git@github.com:SunriseDigitalStudy/リポジトリ test-20120821
+		
+	githubに戻って変更内容がリモートに送られたか確認してください。
+	https://github.com/SunriseDigitalStudy/リポジトリ名
+	
+
+(9) ファイルの変更とファイルの状態を確認する。
+	
+	ファイルに何か変更を加えて下さい。ここでは仮にindex.htmlとします。
+	変更してファイルを保存したら、変更したファイル状態を
+	確認してみてください。
+	
+		コマンド＞$git status
+		
+		-------------------------------------------------------------------------------
+		# On branch master
+		# Changes not staged for commit:
+		#   (use "git add <file>..." to update what will be committed)
+		#   (use "git checkout -- <file>..." to discard changes in working directory)
+		#
+		#       modified:   index.html
+		#
+		no changes added to commit (use "git add" and/or "git commit -a")
+		-------------------------------------------------------------------------------
+
+	「このファイルって変更されてるけど、ステージングエリアに上がってないよ～だからまだコミット出来ないよ～」となります。
+	※使っているツールによってメッセージは変わります。
+	この時、modifiedの部分が赤くなります。
+	このファイルをステージします。
+	
+		コマンド＞$ git add index.html
+		
+	もう一度、状態を確認します。
+	
+		コマンド＞$git status
+		
+		-------------------------------------------------------------------------------
+		# On branch master
+		# Changes to be committed:
+		#   (use "git reset HEAD <file>..." to unstage)
+		#
+		#       modified:   index.html
+		#
+		-------------------------------------------------------------------------------
+
+	すると、今度はmodifiedの部分が緑になりした。
+	「ステージングエリアに上がったから、コミットしていいよ」となります。
+	お許しが出たので、コミットしてみましょう。
+	
+		コマンド＞$git commit -m "ここにコミットメッセージをどうぞ" -m "さらにコミットメッセージをどうぞ"
+		
+	※commitのコマンドオプションの「-m」は複数付けられます。追加したメッセージは段落になります。
+	※ちなみにオプション「-a」にすると、ステージとコミットを同時に行えます。
+
+(10) ログの確認
+
+	コミットの履歴を確認します。
+	
+		コマンド＞$git log -1
+		
+	logコマンドのオプション「-1」の意味は前回の履歴、「-2」にすると前々回までの履歴が見れます。
+	オプションを付けずに$git logだけにした場合は、全部の履歴が表示されます。
+	
+
+
+
+
+
